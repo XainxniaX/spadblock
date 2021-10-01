@@ -7,7 +7,7 @@ Linux (ubuntu/mint) : requires "amixer" avalible in bash.
 Windows (Vista or newer) : uses powershell/.NET from https://stackoverflow.com/questions/21355891/change-audio-level-from-powershell
 Android : Not yet implemented, but Xamarin should allow audio manipulation.
 
-#Spotify web API Authentication
+# Spotify web API Authentication
 The user will be prompted to visit https://developer.spotify.com/console/get-users-currently-playing-track/?market=US&additional_types=
 in order to generate a token which allows this program to view the currently playing track/ad. In the future the user will instead sign in to spotify
 and provide a permanent token-access to the web API. However this process works for now.
