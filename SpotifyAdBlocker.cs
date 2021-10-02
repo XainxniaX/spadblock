@@ -34,6 +34,7 @@ namespace spadblock
         }
         static bool running = true;
         static bool muted = false;
+        static bool paused = false;
         static Platforms platform = Platforms.LINUX; //change this to change platform
         static string defaultToken = "BQBfdwl5O-d61fgMs_i9oiR_Ofz9iao_NbqGEgNZwxmTyViQn8VS28W7VfWgJMPAXYniICJZav_9zlyn2dRth9Ou8wNreHztwElK9fNEKXAR14yWYlnOSRZAMCuSCQLwHJhTrXKnX1rrorAVKZ2u8FJxFMa65cMpcmwuWqs";
         static string currentSong = "--None--";
@@ -111,10 +112,14 @@ namespace spadblock
 
         static void PrintLicense()
         {
-            Console.WriteLine("\n                                 SPOTIFY AD BLOCKER version 1 \n");
-            Console.WriteLine("spadblock (SPOTIFY AD-BLOCK/MUTE)  Copyright (C) 2021  Ryan Neuman");
-            Console.WriteLine("This program comes with ABSOLUTELY NO WARRANTY; This is free software, and");
-            Console.WriteLine("you are welcome to redistribute it under certain conditions provided by the GNU GPLv3.");            
+            Console.WriteLine();
+            Console.WriteLine("|##############################| SPOTIFY AD BLOCKER/MUTE v1.0 |##############################|");
+            Console.WriteLine("|                       SpadBlock - Copyright (C) 2021 - Ryan Neuman                         |");
+            Console.WriteLine("| This program comes with ABSOLUTELY NO WARRANTY; This is free software, and you are welcome |");
+            Console.WriteLine("| to redistribute it under certain conditions provided by the GNU GPLv3. For more info about |");
+            Console.WriteLine("| about certain restrictions see the GPLv3 at: <https://www.gnu.org/licenses/>.              |");
+            Console.WriteLine("|############################################################################################|"); 
+            Console.WriteLine("\n");           
         }
         
 
@@ -123,11 +128,13 @@ namespace spadblock
         {
             try
             {
-                PrintLicense();
-                Console.WriteLine("\n");
-                Console.WriteLine(@"Visit: ( https://developer.spotify.com/console/get-users-currently-playing-track/?market=US&additional_types= ) and generate a token with access to 'user-read-currently-playing'");
-                Console.WriteLine("Then paste the token below - [ctrl+shift+V] or [middle-click] generally.");
-                var token = Console.ReadLine();
+                PrintLicense();    
+                Console.WriteLine("INITIALIZE YOUR WebAPI TOKEN");            
+                Console.WriteLine(@"1) Visit the link below and generate a token with access to 'user-read-currently-playing'. (It's the green button 'Get Token' next to OAuth box)");        
+                Console.WriteLine("   <https://developer.spotify.com/console/get-users-currently-playing-track/?market=US&additional_types=>");       
+                Console.WriteLine("2) Then paste the token below - [ctrl+shift+V] or [middle-click] generally. (the token will look like random BASE64 chars in the OAuth box)\n");                
+                Console.Write("WebAPI token: ");
+                var token = Console.ReadLine();                
                 Console.WriteLine("\nTo exit either hit the 'X' on the console window, or do [ctrl+c].");
                 var spotify = new SpotifyClient(token);                
                 Console.WriteLine($"[{DateTime.Now.ToShortTimeString()}] Connected to webAPI.");
@@ -136,38 +143,53 @@ namespace spadblock
                 {
                     Thread.Sleep(500); //so we dont flood the spotify web api or use too much bandwidth for our requests.
                     var curr = await spotify.Player.GetCurrentlyPlaying(new PlayerCurrentlyPlayingRequest());
-                    if (count % 1200 == 0)
+                    if (count != 0 && count % 1200 == 0)
                     {
                         Console.WriteLine($"[{DateTime.Now.ToShortTimeString()}] Query #{count} (~120 per minute)");
                     }
                     //Console.WriteLine(curr.CurrentlyPlayingType);
                     //SpotifyAPI.Web.FullTrack track = curr.Item as SpotifyAPI.Web.FullTrack;
                     //Console.WriteLine(track.Uri);
-                    if (curr == null) continue;                    
-                    if (curr.CurrentlyPlayingType == "track")
+                    if (curr == null)
                     {
-                        var track = (curr.Item as SpotifyAPI.Web.FullTrack);
-                        if (currentSong != track.Name)
+                        if (!paused)
                         {
-                            currentSong = track.Name;
-                            Console.WriteLine($"[{DateTime.Now.ToShortTimeString()}] Track : {currentSong}");
+                            paused = true;
+                            Console.WriteLine($"[{DateTime.Now.ToShortTimeString()}] Playback Stopped/Paused!");
                         }
+                        count++;
+                        continue;
                     }
-
-                    if ((curr.CurrentlyPlayingType == "ad" && !muted) || (curr.CurrentlyPlayingType != "ad" && muted))
+                    else
                     {
-                        switch (platform)
+                        if (paused)
                         {
-                            case Platforms.LINUX:
-                                TogMute_Linux();
-                                break;
-                            case Platforms.WINDOWS:
-                                TogMute_Windows();
-                                break;
-                            case Platforms.ANDROID:
-                                throw new Exception("ANDROID IS NOT YET SUPPORTED!");
+                            paused = false;
+                            Console.WriteLine($"[{DateTime.Now.ToShortTimeString()}] Playback Resumed!");
                         }
-                        
+                        if ((curr.CurrentlyPlayingType == "ad" && !muted) || (curr.CurrentlyPlayingType != "ad" && muted))
+                        {
+                            switch (platform)
+                            {
+                                case Platforms.LINUX:
+                                    TogMute_Linux();
+                                    break;
+                                case Platforms.WINDOWS:
+                                    TogMute_Windows();
+                                    break;
+                                case Platforms.ANDROID:
+                                    throw new Exception("ANDROID IS NOT YET SUPPORTED!");
+                            }
+                        }
+                        else if (curr.CurrentlyPlayingType == "track")
+                        {
+                            var track = (curr.Item as SpotifyAPI.Web.FullTrack);
+                            if (currentSong != track.Name)
+                            {
+                                currentSong = track.Name;
+                                Console.WriteLine($"[{DateTime.Now.ToShortTimeString()}] Track : {currentSong}");
+                            }
+                        }
                     }
                     count++;
                 }
