@@ -138,7 +138,7 @@ namespace spadblock
                 Console.WriteLine("\nTo exit either hit the 'X' on the console window, or do [ctrl+c].");
                 var spotify = new SpotifyClient(token);                
                 Console.WriteLine($"[{DateTime.Now.ToShortTimeString()}] Connected to webAPI.");
-                Console.WriteLine($"[{DateTime.Now.ToShortTimeString()}] Starting daemon...");
+                Console.WriteLine($"[{DateTime.Now.ToShortTimeString()}] Starting query loop...");
                 while (running)
                 {
                     Thread.Sleep(500); //so we dont flood the spotify web api or use too much bandwidth for our requests.
