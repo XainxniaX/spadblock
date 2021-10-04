@@ -22,6 +22,7 @@ using System;
 using System.Threading.Tasks;
 using SpotifyAPI.Web;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace spadblock
 {
@@ -35,8 +36,7 @@ namespace spadblock
         static bool running = true;
         static bool muted = false;
         static bool paused = false;
-        static Platforms platform = Platforms.LINUX; //change this to change platform
-        static string defaultToken = "BQBfdwl5O-d61fgMs_i9oiR_Ofz9iao_NbqGEgNZwxmTyViQn8VS28W7VfWgJMPAXYniICJZav_9zlyn2dRth9Ou8wNreHztwElK9fNEKXAR14yWYlnOSRZAMCuSCQLwHJhTrXKnX1rrorAVKZ2u8FJxFMa65cMpcmwuWqs";
+        static Platforms platform = Platforms.LINUX; //change this to change platform        
         static string currentSong = "--None--";
         static long count = 0;
 
@@ -119,7 +119,7 @@ namespace spadblock
             Console.WriteLine("| to redistribute it under certain conditions provided by the GNU GPLv3. For more info about |");
             Console.WriteLine("| about certain restrictions see the GPLv3 at: <https://www.gnu.org/licenses/>.              |");
             Console.WriteLine("|############################################################################################|"); 
-            Console.WriteLine("\n");           
+            Console.WriteLine("");           
         }
         
 
@@ -127,8 +127,13 @@ namespace spadblock
         static async Task Main()
         {
             try
-            {
-                PrintLicense();    
+            {                                
+                PrintLicense();
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) platform = Platforms.LINUX;
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) platform = Platforms.WINDOWS;
+                else platform = Platforms.ANDROID; //assume android otherwise.                
+                Console.WriteLine($"Platform {platform.ToString()} detected!\n");
+
                 Console.WriteLine("INITIALIZE YOUR WebAPI TOKEN");            
                 Console.WriteLine(@"1) Visit the link below and generate a token with access to 'user-read-currently-playing'. (It's the green button 'Get Token' next to OAuth box)");        
                 Console.WriteLine("   <https://developer.spotify.com/console/get-users-currently-playing-track/?market=US&additional_types=>");       

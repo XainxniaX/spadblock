@@ -1,20 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "/home/ryann/LIB/c#/spadblock/spadblock.csproj": {}
+    "C:\\LIBRARY\\REPOS\\spadblock\\spadblock.csproj": {}
   },
   "projects": {
-    "/home/ryann/LIB/c#/spadblock/spadblock.csproj": {
+    "C:\\LIBRARY\\REPOS\\spadblock\\spadblock.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/ryann/LIB/c#/spadblock/spadblock.csproj",
+        "projectUniqueName": "C:\\LIBRARY\\REPOS\\spadblock\\spadblock.csproj",
         "projectName": "spadblock",
-        "projectPath": "/home/ryann/LIB/c#/spadblock/spadblock.csproj",
-        "packagesPath": "/home/ryann/.nuget/packages/",
-        "outputPath": "/home/ryann/LIB/c#/spadblock/obj/",
+        "projectPath": "C:\\LIBRARY\\REPOS\\spadblock\\spadblock.csproj",
+        "packagesPath": "C:\\Users\\xainx\\.nuget\\packages\\",
+        "outputPath": "C:\\LIBRARY\\REPOS\\spadblock\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/ryann/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\xainx\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
@@ -58,7 +63,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/5.0.401/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }
